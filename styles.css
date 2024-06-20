@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #2d3a4b;
+    color: white;
+    padding: 20px;
+}
+
+.profile {
+    margin-bottom: 20px;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu li {
+    padding: 15px 0;
+    cursor: pointer;
+}
+
+.main-content {
+    flex-grow: 1;
+    background-color: #f4f5f7;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+header input[type="text"] {
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.widgets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.widget {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex: 1 1 calc(33.333% - 40px);
+    box-sizing: border-box;
+}
+
+.widget h3 {
+    margin-top: 0;
+}
+
+.widget1, .widget3, .widget4, .widget5, .widget6, .widget7, .widget8 {
+    height: 200px;
+}
+
+.widget2 {
+    height: 300px;
+}
+
+.calendar {
+    background-color: #e9ecef;
+    height: 100%;
+}
+
+.chart {
+    background-color: #e9ecef;
+    height: 100%;
+}
+
+.progress {
+    background-color: #e9ecef;
+    height: 100%;
+}
+
+.bar-chart {
+    background-color: #e9ecef;
+    height: 100%;
+}
+
+.pie-chart {
+    background-color: #e9ecef;
+    height: 100%;
+}

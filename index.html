@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: black;
+        }
+        header {
+            background: #35424a;
+            color: #fff;
+            padding: 1em 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        main {
+            padding: 20px;
+        }
+        .nav {
+            background: #333;
+            color: #fff;
+            overflow: hidden;
+        }
+        .nav .toggle-nav {
+            display: none;
+        }
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-links li {
+            margin: 0;
+        }
+        .nav-links li a {
+            display: block;
+            padding: 1em;
+            color: #fff;
+            text-decoration: none;
+        }
+        .nav-links li a:hover {
+            background: #575757;
+        }
+        form {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            color: white;
+            border-radius: 9px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        form input, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border-radius: 9px;
+        }
+        .button1 {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 255, 0.4);
+            border-radius: 9px;
+        }
+                .buttondownload {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 255, 0.8);
+            border-radius: 9px;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 2px solid black;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 2px solid black;
+            text-align: left;
+        }
+        table th {
+            background: grey;
+            color: white;
+        }
+        table tr {
+            color: black;
+            border: 2px solid black;
+        }
+        button.delete-button {
+            background: darkred;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button.delete-button:hover {
+            background: darkred;
+        }
+        .footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        body.dark-theme {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        body.dark-theme .header {
+            background-color: #333;
+        }
+        body.dark-theme .nav {
+            background-color: #222;
+        }
+        body.dark-theme .nav .nav-links li a {
+            color: #bbb;
+        }
+        body.dark-theme .nav .nav-links li a:hover {
+            background-color: #444;
+            color: white;
+        }
+        body.dark-theme .footer {
+            background-color: #222;
+        }
+        body.dark-theme .chart-container {
+            background-color: #222;
+        }
+        body.dark-theme .summary2 {
+            background-color: white;
+            color: black;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .nav .toggle-nav {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.5em;
+                color: #fff;
+                padding: 1em;
+                cursor: pointer;
+            }
+        }
+        .summary1 {
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border: 9px;
+            border-color: black;
+        }
+        .summary2 {
+            background-color: black;
+            color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border: 9px;
+border-color: black;
+        }
+        #summary {
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        #summary h2 {
+            margin-top: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        #summary p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+        #summary p span {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .income {
+            background-color: lightgreen;
+        }
+        .expense {
+            background-color: lightcoral;
+        }
+        #activityForm.collapsed {
+            display: none;
+        }
+        #summaryHeading {
+            cursor: pointer;
+        }
+        #collapseIcon {
+            margin-left: 5px;
+        }
+        #collapseIcon.collapsed {
+            transform: rotate(90deg);
+        }
+        .chart-container {
+            background-color: white;
+            color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            bottom: 200px;
+            margin-bottom: 100px;
+        }
+.futuristic-dropdown {
+    display: flex;
+    align-items: center;
+    position: relative;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+    height: 30px;
+    width: 130px;
+    margin-bottom: 20px;
+}
+
+.futuristic-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+    margin-right: 10px;
+    flex: 1;
+    text-align: center;
+}
+
+.futuristic-dropdown select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.futuristic-dropdown select:focus {
+    border: none;
+    outline: none;
+}
+
+.arrow-down {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #666;
+    transition: border-color 0.3s ease;
+}
+
+.futuristic-dropdown:hover {
+    border-color: #999;
+}
+
+.futuristic-dropdown:hover .arrow-down {
+    border-top-color: #999;
+}
+    </style>
+</head>
+<body>
+<header class="header">
+    <h1><i class="fas fa-home"></i> Pembukuan </h1>
+    <label class="switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider round"></span>
+    </label>
+</header>
+<nav class="nav">
+    <button id="toggleNavButton" class="toggle-nav">☰</button>
+    <ul id="navLinks" class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#add">Add Activity</a></li>
+        <li><a href="#list">Activity List</a></li>
+        <li><a href="#chart">Activity Chart</a></li>
+    </ul>
+</nav>
+<main>
+    <section id="home">
+    </section>
+    <section id="add">
+        <div id="summary">
+            <h2><i class="fas fa-chart-pie"></i> Summary</h2>
+            <p style="color:lightgreen">
+                <i class="fas fa-money-bill"></i> Total Income: <span id="totalIncome">Rp. 0</span>
+            </p>
+            <p style="color:lightcoral">
+                <i class="fas fa-money-bill"></i> Total Expense: <span id="totalExpense">Rp. 0</span>
+            </p>
+            <p style="color:green">
+                <i class="fas fa-balance-scale"></i> Available Balance: <span id="availableBalance">Rp. 0</span>
+            </p>
+            <p>
+                <i class="fas fa-tasks"></i> Total Activities: <span id="totalActivities">0</span>
+            </p>
+        </div>
+        <h2 class="summary1" id="summaryHeading">
+            <i class="fas fa-plus"></i> Add Activity
+            <span id="collapseIcon">▼</span>
+        </h2>
+        <form id="activityForm" class="collapsed">
+<label for="activityName"><i class="fas fa-tasks"></i> Activity:</label>
+<input type="text" id="activityName" name="activityName" required>
+<label for="amount"><i class="fas fa-money-bill"></i> Amount:</label>
+<input type="number" id="amount" name="amount" required>
+<label for="category"><i class="fas fa-list-alt"></i> Category:</label>
+<select id="category" name="category" required>
+    <option value="income">Pemasukan</option>
+    <option value="expense">Pengeluaran</option>
+</select>
+<label for="activityDate"><i class="fas fa-calendar-alt"></i> Date:</label>
+<input type="date" id="activityDate" name="activityDate" required>
+<button class="button1" type="submit"><i style="color:white" class="fas fa-plus-circle"></i><b style="color:white">Add Activity</b></button>
+        </form>
+    </section>
+    <section id="list">
+<label for="monthFilter" class="futuristic-label">Filter by Month:</label>
+<div class="futuristic-dropdown">
+    <select id="monthFilter">
+        <option value="all">All</option>
+        <option value="01">January</option>
+        <option value="02">February</option>
+        <option value="03">March</option>
+        <option value="04">April</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">August</option>
+        <option value="09">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+    </select>
+    <div class="arrow-down"></div>
+</div>
+        <table>
+<thead>
+    <tr>
+        <th><i class="fas fa-tasks"></i> Activity</th>
+        <th><i class="fas fa-money-bill"></i> Amount</th>
+        <th><i class="fas fa-list-alt"></i> Category</th>
+        <th><i class="fas fa-calendar-alt"></i> Date</th>
+        <th><i class="fas fa-cogs"></i> Action</th>
+    </tr>
+</thead>
+<tbody id="activityTableBody"></tbody>
+            <tbody id="activityTableBody"></tbody>
+        </table>
+    </section>
+<button class="buttondownload" id="downloadHtmlButton"><i class="fas fa-download"></i> Download HTML</button>
+    <section id="chart">
+        <h2><i class="fas fa-chart-pie"></i> Activity Chart</h2>
+        <div class="chart-container">
+            <canvas id="activityChart"></canvas>
+        </div>
+    </section>
+</main>
+<footer class="footer">
+    <p>&copy; Catet Seng Genah !!! lek ilang ben ero </p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    const darkModeToggle = document.getElementById('themeToggle');
+    const toggleNavButton = document.getElementById('toggleNavButton');
+    const navLinks = document.getElementById('navLinks');
+    const activityInput = document.getElementById('activityName');
+    const amountInput = document.getElementById('amount');
+    const dateInput = document.getElementById('activityDate');
+    const typeSelect = document.getElementById('category');
+    const summaryBody = document.getElementById('activityTableBody');
+    const activityChart = document.getElementById('activityChart');
+    const downloadHtmlButton = document.getElementById('downloadHtmlButton');
+
+    let activities = JSON.parse(localStorage.getItem('activities')) || [];
+
+    function renderTable(selectedMonth = 'all') {
+        summaryBody.innerHTML = '';
+        let incomeTotal = 0;
+        let expenseTotal = 0;
+
+        const filteredActivities = selectedMonth !== 'all' ? activities.filter(activity => {
+            const activityMonth = new Date(activity.date).getMonth() + 1;
+            return activityMonth === parseInt(selectedMonth);
+        }) : activities;
+
+        filteredActivities.forEach((activity, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="${activity.category === 'income' ? 'income' : 'expense'}">${activity.activity}</td>
+                <td class="${activity.category === 'income' ? 'income' : 'expense'}">Rp.${activity.amount.toLocaleString()}</td>
+                <td class="${activity.category === 'income' ? 'income' : 'expense'}">${activity.category}</td>
+                <td class="${activity.category === 'income' ? 'income' : 'expense'}">${activity.date}</td>
+                <td class="${activity.category === 'income' ? 'income' : 'expense'}">
+                    <button class="delete-button" data-index="${index}">Delete</button>
+                </td>
+            `;
+            summaryBody.appendChild(row);
+
+            if (activity.category === 'income') {
+                incomeTotal += activity.amount;
+            } else {
+                expenseTotal += activity.amount;
+            }
+        });
+
+        const availableBalance = incomeTotal - expenseTotal;
+
+        document.getElementById('totalIncome').textContent = 'Rp.' + incomeTotal.toLocaleString();
+        document.getElementById('totalExpense').textContent = 'Rp.' + expenseTotal.toLocaleString();
+        document.getElementById('availableBalance').textContent = 'Rp.' + availableBalance.toLocaleString();
+        document.getElementById('totalActivities').textContent = filteredActivities.length;
+
+        renderChart(incomeTotal, expenseTotal);
+    }
+
+    document.getElementById('monthFilter').addEventListener('change', function() {
+        const selectedMonth = this.value;
+        renderTable(selectedMonth);
+    });
+
+    renderTable();
+
+    function renderChart(incomeTotal, expenseTotal) {
+        const ctx = activityChart.getContext('2d');
+        const data = {
+            labels: ['Income', 'Expense'],
+            datasets: [{
+                data: [incomeTotal, expenseTotal],
+                backgroundColor: ['lightgreen', '#FF6384'],
+                hoverBackgroundColor: ['lightgreen', '#FF6384']
+            }]
+        };
+        const options = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                            const value = context.raw;
+                            const percentage = ((value / total) * 100).toFixed(2) + '%';
+                            return `${context.label}: Rp.${value.toLocaleString()} (${percentage})`;
+                        }
+                    }
+                }
+            }
+        };
+
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
+
+        window.myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: options
+        });
+    }
+
+    function addActivity(event) {
+        event.preventDefault();
+
+        const activity = activityInput.value.trim();
+        const amount = parseFloat(amountInput.value.trim());
+        const date = dateInput.value.trim();
+        const category = typeSelect.value.trim();
+
+        if (!activity || isNaN(amount) || amount <= 0 || !date) {
+            alert('Please fill in all fields correctly.');
+            return;
+        }
+
+        const newActivity = { activity, amount, date, category };
+        activities.push(newActivity);
+        localStorage.setItem('activities', JSON.stringify(activities));
+
+        renderTable();
+
+        activityInput.value = '';
+        amountInput.value = '';
+        dateInput.value = '';
+        typeSelect.value = 'income';
+
+        Swal.fire({
+            title: "Good job!",
+            text: "Activity added successfully!",
+            icon: "success",
+            confirmButtonText: "OK"
+        });
+
+        const form = document.getElementById('activityForm');
+        const icon = document.getElementById('collapseIcon');
+        
+        if (!form.classList.contains('collapsed')) {
+            form.classList.add('collapsed');
+            icon.classList.add('collapsed');
+        }
+    }
+
+    document.getElementById('activityForm').addEventListener('submit', addActivity);
+
+    document.getElementById('summaryHeading').addEventListener('click', function() {
+        const form = document.getElementById('activityForm');
+        const icon = document.getElementById('collapseIcon');
+
+        form.classList.toggle('collapsed');
+        icon.classList.toggle('collapsed');
+
+        if (!form.classList.contains('collapsed')) {
+            activityInput.focus();
+        }
+    });
+
+    summaryBody.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-button')) {
+            const index = parseInt(event.target.getAttribute('data-index'));
+            activities.splice(index, 1);
+            localStorage.setItem('activities', JSON.stringify(activities));
+            renderTable();
+
+            Swal.fire({
+                title: "Yakin Te di Busek?",
+                text: "Lek wes Di busek Lenyap loo!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Bah, Busek en!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Kebusek!",
+                        text: "Wes tak Busekno.",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+    });
+
+    downloadHtmlButton.addEventListener('click', downloadHtml);
+
+    function downloadHtml() {
+    const monthFilter = document.getElementById('monthFilter').value;
+    let filteredActivities = activities;
+    let filteredMonth = 'all';
+
+    if (monthFilter !== 'all') {
+        filteredMonth = monthFilter;
+        filteredActivities = activities.filter(activity => {
+            const activityMonth = new Date(activity.date).getMonth() + 1;
+            return activityMonth === parseInt(monthFilter);
+        });
+    }
+
+    const monthName = filteredMonth === 'all' ? 'All Months' : getMonthName(parseInt(filteredMonth));
+    const fileName = `summary_${monthName}.html`;
+
+    let incomeTotal = 0;
+    let expenseTotal = 0;
+
+    filteredActivities.forEach(activity => {
+        if (activity.category === 'income') {
+            incomeTotal += activity.amount;
+        } else if (activity.category === 'expense') {
+            expenseTotal += activity.amount;
+        }
+    });
+
+    const availableBalance = incomeTotal - expenseTotal;
+
+    const filteredHtmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Summary - ${monthName}</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                }
+
+                table {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                th, td {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                }
+
+                th {
+                    background-color: #f2f2f2;
+                }
+
+                .income {
+                    color: green;
+                }
+
+                .expense {
+                    color: red;
+                }
+            </style>
+        </head>
+        <body>
+            <h2>Summary - ${monthName}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Activity</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filteredActivities.map(activity => `
+                        <tr>
+                            <td>${activity.activity}</td>
+                            <td class="${activity.category === 'income' ? 'income' : 'expense'}">Rp.${activity.amount.toLocaleString()}</td>
+                            <td>${activity.category}</td>
+                            <td>${activity.date}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <h3>Total Income: Rp.${incomeTotal.toLocaleString()}</h3>
+            <h3>Total Expense: Rp.${expenseTotal.toLocaleString()}</h3>
+            <h3>Available Balance: Rp.${availableBalance.toLocaleString()}</h3>
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob([filteredHtmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    // SweetAlert2 Toast Notification
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    });
+
+    Toast.fire({
+        icon: "success",
+        title: "HTML downloaded successfully"
+    });
+}
+
+    function getMonthName(monthIndex) {
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        return months[monthIndex - 1];
+    }
+});
+  
+</script>
+</body>
+</html>
